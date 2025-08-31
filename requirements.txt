@@ -1,0 +1,19 @@
+# The QA bot (main_qa_bot.py) and the *_local scripts
+langchain==0.2.11
+langchain-core>=0.2.23,<0.3.0
+langchain-community==0.2.10
+langchain-text-splitters==0.2.2
+transformers>=4.40.0
+torch>=2.2.0
+accelerate>=0.30.0
+sentence-transformers>=3.0.1
+chromadb==0.4.24
+pypdf==4.3.1
+gradio>=4.44.0
+requests
+beautifulsoup4
+nltk
+
+# Only for the IBM watsonx versions (they need the IBM Skills Network lab credentials)
+ibm-watsonx-ai
+langchain-ibm
