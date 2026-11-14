@@ -30,13 +30,13 @@ def download_file(url, filename):
         try:
             import urllib.request
             urllib.request.urlretrieve(url, filename)
-            print(f"✓ {filename} downloaded successfully")
+            print(f"{filename} downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading {filename}: {e}")
+            print(f"Error downloading {filename}: {e}")
             print("Please download manually or check your internet connection")
             return False
     else:
-        print(f"✓ {filename} already exists")
+        print(f"{filename} already exists")
     return True
 
 def build_llm():
@@ -68,15 +68,15 @@ def build_llm():
         )
         
         mixtral_llm = WatsonxLLM(model=model)
-        print("✓ LLM built successfully")
+        print("LLM built successfully")
         return mixtral_llm
         
     except ImportError as e:
-        print(f"⚠ Error importing LLM dependencies: {e}")
+        print(f"Error importing LLM dependencies: {e}")
         print("Please install ibm-watsonx-ai")
         return None
     except Exception as e:
-        print(f"⚠ Error building LLM: {e}")
+        print(f"Error building LLM: {e}")
         return None
 
 def text_splitter(data, chunk_size, chunk_overlap):
@@ -90,15 +90,15 @@ def text_splitter(data, chunk_size, chunk_overlap):
             length_function=len,
         )
         chunks = text_splitter.split_documents(data)
-        print(f"✓ Text split into {len(chunks)} chunks")
+        print(f"Text split into {len(chunks)} chunks")
         return chunks
         
     except ImportError as e:
-        print(f"⚠ Error importing text splitter: {e}")
+        print(f"Error importing text splitter: {e}")
         print("Please install langchain")
         return None
     except Exception as e:
-        print(f"⚠ Error splitting text: {e}")
+        print(f"Error splitting text: {e}")
         return None
 
 def watsonx_embedding():
@@ -118,15 +118,15 @@ def watsonx_embedding():
             project_id="skills-network",
             params=embed_params,
         )
-        print("✓ Watsonx embedding model built successfully")
+        print("Watsonx embedding model built successfully")
         return watsonx_embedding
         
     except ImportError as e:
-        print(f"⚠ Error importing embedding dependencies: {e}")
+        print(f"Error importing embedding dependencies: {e}")
         print("Please install ibm-watsonx-ai and langchain-ibm")
         return None
     except Exception as e:
-        print(f"⚠ Error building embedding model: {e}")
+        print(f"Error building embedding model: {e}")
         return None
 
 def demonstrate_vector_store_retriever():
@@ -138,7 +138,7 @@ def demonstrate_vector_store_retriever():
         "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/MZ9z1lm-Ui3YBp3SYWLTAQ/companypolicies.txt",
         "companypolicies.txt"
     ):
-        print("⚠ Cannot proceed without the company policies document.")
+        print("Cannot proceed without the company policies document.")
         return None
     
     try:
@@ -146,14 +146,14 @@ def demonstrate_vector_store_retriever():
         
         loader = TextLoader("companypolicies.txt")
         txt_data = loader.load()
-        print(f"✓ Company policies document loaded. Number of documents: {len(txt_data)}")
+        print(f"Company policies document loaded. Number of documents: {len(txt_data)}")
         print(f"Document preview: {txt_data[0].page_content[:200]}...\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing TextLoader: {e}")
+        print(f"Error importing TextLoader: {e}")
         return None
     except Exception as e:
-        print(f"⚠ Error loading document: {e}")
+        print(f"Error loading document: {e}")
         return None
     
     # Split document into chunks
@@ -171,14 +171,14 @@ def demonstrate_vector_store_retriever():
         from langchain.vectorstores import Chroma
         
         vectordb = Chroma.from_documents(chunks_txt, embedding_model)
-        print("✓ Vector database created successfully\n")
+        print("Vector database created successfully\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing Chroma: {e}")
+        print(f"Error importing Chroma: {e}")
         print("Please install chromadb")
         return None
     except Exception as e:
-        print(f"⚠ Error creating vector database: {e}")
+        print(f"Error creating vector database: {e}")
         return None
     
     # Simple similarity search
@@ -188,22 +188,22 @@ def demonstrate_vector_store_retriever():
     
     try:
         docs = retriever.invoke(query)
-        print(f"✓ Retrieved {len(docs)} documents for query: '{query}'")
+        print(f"Retrieved {len(docs)} documents for query: '{query}'")
         print("First document preview:")
         print(f"  {docs[0].page_content[:200]}...\n")
         
     except Exception as e:
-        print(f"⚠ Error with similarity search: {e}")
+        print(f"Error with similarity search: {e}")
     
     # MMR retrieval
     print("--- MMR Retrieval ---")
     try:
         retriever = vectordb.as_retriever(search_type="mmr")
         docs = retriever.invoke(query)
-        print(f"✓ MMR retrieval completed. Retrieved {len(docs)} documents\n")
+        print(f"MMR retrieval completed. Retrieved {len(docs)} documents\n")
         
     except Exception as e:
-        print(f"⚠ Error with MMR retrieval: {e}")
+        print(f"Error with MMR retrieval: {e}")
     
     # Similarity score threshold retrieval
     print("--- Similarity Score Threshold Retrieval ---")
@@ -213,10 +213,10 @@ def demonstrate_vector_store_retriever():
             search_kwargs={"score_threshold": 0.4}
         )
         docs = retriever.invoke(query)
-        print(f"✓ Threshold retrieval completed. Retrieved {len(docs)} documents\n")
+        print(f"Threshold retrieval completed. Retrieved {len(docs)} documents\n")
         
     except Exception as e:
-        print(f"⚠ Error with threshold retrieval: {e}")
+        print(f"Error with threshold retrieval: {e}")
     
     return vectordb, chunks_txt
 
@@ -225,7 +225,7 @@ def demonstrate_multi_query_retriever(vectordb):
     print("\n=== Multi-Query Retriever ===\n")
     
     if not vectordb:
-        print("⚠ No vector database available. Skipping this section.")
+        print("No vector database available. Skipping this section.")
         return
     
     # Download PDF document
@@ -233,7 +233,7 @@ def demonstrate_multi_query_retriever(vectordb):
         "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/ioch1wsxkfqgfLLgmd-6Rw/langchain-paper.pdf",
         "langchain-paper.pdf"
     ):
-        print("⚠ Cannot proceed without the PDF document.")
+        print("Cannot proceed without the PDF document.")
         return
     
     try:
@@ -241,15 +241,15 @@ def demonstrate_multi_query_retriever(vectordb):
         
         loader = PyPDFLoader("langchain-paper.pdf")
         pdf_data = loader.load()
-        print(f"✓ LangChain paper loaded. Number of pages: {len(pdf_data)}")
+        print(f"LangChain paper loaded. Number of pages: {len(pdf_data)}")
         print(f"First page preview: {pdf_data[0].page_content[:200]}...\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing PyPDFLoader: {e}")
+        print(f"Error importing PyPDFLoader: {e}")
         print("Please install pypdf")
         return
     except Exception as e:
-        print(f"⚠ Error loading PDF: {e}")
+        print(f"Error loading PDF: {e}")
         return
     
     # Split PDF and update vector database
@@ -262,10 +262,10 @@ def demonstrate_multi_query_retriever(vectordb):
         ids = vectordb.get()["ids"]
         vectordb.delete(ids)
         vectordb = Chroma.from_documents(documents=chunks_pdf, embedding=watsonx_embedding())
-        print("✓ Vector database updated with PDF content\n")
+        print("Vector database updated with PDF content\n")
         
     except Exception as e:
-        print(f"⚠ Error updating vector database: {e}")
+        print(f"Error updating vector database: {e}")
         return
     
     # Multi-Query Retriever
@@ -285,13 +285,13 @@ def demonstrate_multi_query_retriever(vectordb):
         logging.getLogger("langchain.retrievers.multi_query").setLevel(logging.INFO)
         
         docs = retriever.invoke(query)
-        print(f"✓ Multi-query retrieval completed. Retrieved {len(docs)} documents")
+        print(f"Multi-query retrieval completed. Retrieved {len(docs)} documents")
         print("Note: Check the logs above to see the generated queries\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing MultiQueryRetriever: {e}")
+        print(f"Error importing MultiQueryRetriever: {e}")
     except Exception as e:
-        print(f"⚠ Error with multi-query retrieval: {e}")
+        print(f"Error with multi-query retrieval: {e}")
 
 def demonstrate_self_querying_retriever():
     """Demonstrate Self-Querying Retriever"""
@@ -335,14 +335,14 @@ def demonstrate_self_querying_retriever():
             ),
         ]
         
-        print(f"✓ Created {len(docs)} sample movie documents with metadata\n")
+        print(f"Created {len(docs)} sample movie documents with metadata\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing Document dependencies: {e}")
+        print(f"Error importing Document dependencies: {e}")
         print("Please install langchain-core")
         return
     except Exception as e:
-        print(f"⚠ Error creating sample documents: {e}")
+        print(f"Error creating sample documents: {e}")
         return
     
     # Define metadata field information
@@ -378,10 +378,10 @@ def demonstrate_self_querying_retriever():
         from langchain.vectorstores import Chroma
         
         vectordb = Chroma.from_documents(docs, embedding_model)
-        print("✓ Vector database created for movie documents\n")
+        print("Vector database created for movie documents\n")
         
     except Exception as e:
-        print(f"⚠ Error creating vector database: {e}")
+        print(f"Error creating vector database: {e}")
         return
     
     # Self-Querying Retriever
@@ -389,7 +389,7 @@ def demonstrate_self_querying_retriever():
     try:
         llm_model = build_llm()
         if not llm_model:
-            print("⚠ Cannot proceed without LLM model.")
+            print("Cannot proceed without LLM model.")
             return
         
         document_content_description = "Brief summary of a movie."
@@ -401,7 +401,7 @@ def demonstrate_self_querying_retriever():
             metadata_field_info,
         )
         
-        print("✓ Self-querying retriever created successfully\n")
+        print("Self-querying retriever created successfully\n")
         
         # Test queries
         print("--- Testing Self-Querying Retriever ---")
@@ -410,38 +410,38 @@ def demonstrate_self_querying_retriever():
         print("Query: 'I want to watch a movie rated higher than 8.5'")
         try:
             result = retriever.invoke("I want to watch a movie rated higher than 8.5")
-            print(f"✓ Retrieved {len(result)} documents\n")
+            print(f"Retrieved {len(result)} documents\n")
         except Exception as e:
-            print(f"⚠ Error with filter query: {e}\n")
+            print(f"Error with filter query: {e}\n")
         
         # Query with filter
         print("Query: 'Has Greta Gerwig directed any movies about women'")
         try:
             result = retriever.invoke("Has Greta Gerwig directed any movies about women")
-            print(f"✓ Retrieved {len(result)} documents\n")
+            print(f"Retrieved {len(result)} documents\n")
         except Exception as e:
-            print(f"⚠ Error with query + filter: {e}\n")
+            print(f"Error with query + filter: {e}\n")
         
         # Composite filter
         print("Query: 'What is a highly rated (above 8.5) science fiction film?'")
         try:
             result = retriever.invoke("What's a highly rated (above 8.5) science fiction film?")
-            print(f"✓ Retrieved {len(result)} documents\n")
+            print(f"Retrieved {len(result)} documents\n")
         except Exception as e:
-            print(f"⚠ Error with composite filter: {e}\n")
+            print(f"Error with composite filter: {e}\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing SelfQueryRetriever: {e}")
+        print(f"Error importing SelfQueryRetriever: {e}")
         print("Please install langchain and lark")
     except Exception as e:
-        print(f"⚠ Error with self-querying retriever: {e}")
+        print(f"Error with self-querying retriever: {e}")
 
 def demonstrate_parent_document_retriever(chunks_txt):
     """Demonstrate Parent Document Retriever"""
     print("\n=== Parent Document Retriever ===\n")
     
     if not chunks_txt:
-        print("⚠ No text chunks available. Skipping this section.")
+        print("No text chunks available. Skipping this section.")
         return
     
     try:
@@ -453,15 +453,15 @@ def demonstrate_parent_document_retriever(chunks_txt):
         parent_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=20, separator='\n')
         child_splitter = CharacterTextSplitter(chunk_size=400, chunk_overlap=20, separator='\n')
         
-        print("✓ Text splitters configured")
+        print("Text splitters configured")
         print(f"  Parent chunk size: 2000, Child chunk size: 400\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing ParentDocumentRetriever dependencies: {e}")
+        print(f"Error importing ParentDocumentRetriever dependencies: {e}")
         print("Please install langchain and langchain-text-splitters")
         return
     except Exception as e:
-        print(f"⚠ Error configuring text splitters: {e}")
+        print(f"Error configuring text splitters: {e}")
         return
     
     # Build embedding model
@@ -487,20 +487,20 @@ def demonstrate_parent_document_retriever(chunks_txt):
             parent_splitter=parent_splitter,
         )
         
-        print("✓ Parent document retriever created successfully\n")
+        print("Parent document retriever created successfully\n")
         
     except Exception as e:
-        print(f"⚠ Error creating parent document retriever: {e}")
+        print(f"Error creating parent document retriever: {e}")
         return
     
     # Add documents
     try:
         retriever.add_documents(chunks_txt)
-        print("✓ Documents added to retriever")
+        print("Documents added to retriever")
         print(f"Number of large chunks: {len(list(store.yield_keys()))}\n")
         
     except Exception as e:
-        print(f"⚠ Error adding documents: {e}")
+        print(f"Error adding documents: {e}")
         return
     
     # Test retrieval
@@ -517,14 +517,14 @@ def demonstrate_parent_document_retriever(chunks_txt):
         print(f"  {retrieved_docs[0].page_content[:200]}...\n")
         
     except Exception as e:
-        print(f"⚠ Error testing retrieval: {e}")
+        print(f"Error testing retrieval: {e}")
 
 def exercises(chunks_txt):
     """Complete the exercises from the notebook"""
     print("\n=== Exercises ===\n")
     
     if not chunks_txt:
-        print("⚠ No text chunks available for exercises. Skipping this section.")
+        print("No text chunks available for exercises. Skipping this section.")
         return
     
     # Exercise 1: Retrieve top 2 results using vector store-backed retriever
@@ -542,12 +542,12 @@ def exercises(chunks_txt):
         retriever = vectordb.as_retriever(search_kwargs={"k": 2})
         
         docs = retriever.invoke("smoking policy")
-        print(f"✓ Retrieved top 2 results: {len(docs)} documents")
+        print(f"Retrieved top 2 results: {len(docs)} documents")
         print("First result preview:")
         print(f"  {docs[0].page_content[:200]}...\n")
         
     except Exception as e:
-        print(f"⚠ Error with exercise 1: {e}\n")
+        print(f"Error with exercise 1: {e}\n")
     
     # Exercise 2: Self-Querying Retriever for a query
     print("--- Exercise 2: Self-Querying Retriever ---")
@@ -590,14 +590,14 @@ def exercises(chunks_txt):
             )
             
             result = retriever.invoke("I want to watch a movie directed by Christopher Nolan")
-            print(f"✓ Retrieved {len(result)} documents")
+            print(f"Retrieved {len(result)} documents")
             print("Result preview:")
             print(f"  {result[0].page_content[:200]}...\n")
         else:
-            print("⚠ Cannot complete exercise without LLM model\n")
+            print("Cannot complete exercise without LLM model\n")
             
     except Exception as e:
-        print(f"⚠ Error with exercise 2: {e}\n")
+        print(f"Error with exercise 2: {e}\n")
 
 def main():
     """Main function to demonstrate all retrievers"""
@@ -608,11 +608,11 @@ def main():
     
     llm_model = build_llm()
     if not llm_model:
-        print("⚠ Warning: LLM not available. Some retrievers may not work properly.")
+        print("Warning: LLM not available. Some retrievers may not work properly.")
     
     embedding_model = watsonx_embedding()
     if not embedding_model:
-        print("⚠ Error: Cannot proceed without embedding model.")
+        print("Error: Cannot proceed without embedding model.")
         return
     
     # Demonstrate Vector Store-Backed Retriever

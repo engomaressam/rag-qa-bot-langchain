@@ -25,13 +25,13 @@ def download_file(url, filename):
         try:
             import urllib.request
             urllib.request.urlretrieve(url, filename)
-            print(f"✓ {filename} downloaded successfully")
+            print(f"{filename} downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading {filename}: {e}")
+            print(f"Error downloading {filename}: {e}")
             print("Please download manually or check your internet connection")
             return False
     else:
-        print(f"✓ {filename} already exists")
+        print(f"{filename} already exists")
     return True
 
 def load_and_split_data():
@@ -43,7 +43,7 @@ def load_and_split_data():
         "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/i5V3ACEyz6hnYpVq6MTSvg/state-of-the-union.txt",
         "state-of-the-union.txt"
     ):
-        print("⚠ Cannot proceed without the sample document.")
+        print("Cannot proceed without the sample document.")
         return None, None
     
     # Load the document using LangChain's TextLoader
@@ -52,15 +52,15 @@ def load_and_split_data():
         
         loader = TextLoader("state-of-the-union.txt")
         data = loader.load()
-        print(f"✓ Document loaded successfully. Number of documents: {len(data)}")
+        print(f"Document loaded successfully. Number of documents: {len(data)}")
         print(f"Document content preview: {data[0].page_content[:200]}...\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing TextLoader: {e}")
+        print(f"Error importing TextLoader: {e}")
         print("Please install langchain-community: pip install langchain-community")
         return None, None
     except Exception as e:
-        print(f"⚠ Error loading document: {e}")
+        print(f"Error loading document: {e}")
         return None, None
     
     # Split the document into chunks
@@ -75,17 +75,17 @@ def load_and_split_data():
         )
         
         chunks = text_splitter.split_text(data[0].page_content)
-        print(f"✓ Document split into {len(chunks)} chunks")
+        print(f"Document split into {len(chunks)} chunks")
         print(f"First chunk preview: {chunks[0][:100]}...\n")
         
         return data, chunks
         
     except ImportError as e:
-        print(f"⚠ Error importing RecursiveCharacterTextSplitter: {e}")
+        print(f"Error importing RecursiveCharacterTextSplitter: {e}")
         print("Please install langchain: pip install langchain")
         return data, None
     except Exception as e:
-        print(f"⚠ Error splitting document: {e}")
+        print(f"Error splitting document: {e}")
         return data, None
 
 def demonstrate_watsonx_embedding(chunks):
@@ -93,7 +93,7 @@ def demonstrate_watsonx_embedding(chunks):
     print("=== Watsonx Embedding Model ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for embedding. Skipping this section.")
+        print("No chunks available for embedding. Skipping this section.")
         return None
     
     try:
@@ -121,7 +121,7 @@ def demonstrate_watsonx_embedding(chunks):
             project_id="skills-network",
             params=embed_params,
         )
-        print("✓ Watsonx embedding model created successfully\n")
+        print("Watsonx embedding model created successfully\n")
         
         # Query embeddings
         print("--- Query Embeddings ---")
@@ -130,11 +130,11 @@ def demonstrate_watsonx_embedding(chunks):
         
         try:
             query_result = watsonx_embedding.embed_query(query)
-            print(f"✓ Query embedding generated successfully")
+            print(f"Query embedding generated successfully")
             print(f"Embedding dimension: {len(query_result)}")
             print(f"First 5 values: {query_result[:5]}\n")
         except Exception as e:
-            print(f"⚠ Error generating query embedding: {e}")
+            print(f"Error generating query embedding: {e}")
             print("This may be due to missing IBM Watson AI credentials\n")
             return None
         
@@ -142,7 +142,7 @@ def demonstrate_watsonx_embedding(chunks):
         print("--- Document Embeddings ---")
         try:
             doc_result = watsonx_embedding.embed_documents(chunks)
-            print(f"✓ Document embeddings generated successfully")
+            print(f"Document embeddings generated successfully")
             print(f"Number of document embeddings: {len(doc_result)}")
             print(f"First document embedding dimension: {len(doc_result[0])}")
             print(f"First 5 values of first document: {doc_result[0][:5]}\n")
@@ -150,17 +150,17 @@ def demonstrate_watsonx_embedding(chunks):
             return watsonx_embedding
             
         except Exception as e:
-            print(f"⚠ Error generating document embeddings: {e}")
+            print(f"Error generating document embeddings: {e}")
             print("This may be due to missing IBM Watson AI credentials\n")
             return None
             
     except ImportError as e:
-        print(f"⚠ Error importing Watsonx dependencies: {e}")
+        print(f"Error importing Watsonx dependencies: {e}")
         print("Please install ibm-watsonx-ai and langchain-ibm:")
         print("pip install ibm-watsonx-ai langchain-ibm")
         return None
     except Exception as e:
-        print(f"⚠ Error with Watsonx embedding: {e}")
+        print(f"Error with Watsonx embedding: {e}")
         return None
 
 def demonstrate_huggingface_embedding(chunks):
@@ -168,7 +168,7 @@ def demonstrate_huggingface_embedding(chunks):
     print("=== Hugging Face Embedding Model ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for embedding. Skipping this section.")
+        print("No chunks available for embedding. Skipping this section.")
         return None
     
     try:
@@ -185,7 +185,7 @@ def demonstrate_huggingface_embedding(chunks):
         print("--- Building Model ---")
         model_name = "sentence-transformers/all-mpnet-base-v2"
         huggingface_embedding = HuggingFaceEmbeddings(model_name=model_name)
-        print("✓ HuggingFace embedding model created successfully\n")
+        print("HuggingFace embedding model created successfully\n")
         
         # Query embeddings
         print("--- Query Embeddings ---")
@@ -194,11 +194,11 @@ def demonstrate_huggingface_embedding(chunks):
         
         try:
             query_result = huggingface_embedding.embed_query(query)
-            print(f"✓ Query embedding generated successfully")
+            print(f"Query embedding generated successfully")
             print(f"Embedding dimension: {len(query_result)}")
             print(f"First 5 values: {query_result[:5]}\n")
         except Exception as e:
-            print(f"⚠ Error generating query embedding: {e}")
+            print(f"Error generating query embedding: {e}")
             print("This may be due to missing model files or network issues\n")
             return None
         
@@ -206,7 +206,7 @@ def demonstrate_huggingface_embedding(chunks):
         print("--- Document Embeddings ---")
         try:
             doc_result = huggingface_embedding.embed_documents(chunks)
-            print(f"✓ Document embeddings generated successfully")
+            print(f"Document embeddings generated successfully")
             print(f"Number of document embeddings: {len(doc_result)}")
             print(f"First document embedding dimension: {len(doc_result[0])}")
             print(f"First 5 values of first document: {doc_result[0][:5]}\n")
@@ -214,17 +214,17 @@ def demonstrate_huggingface_embedding(chunks):
             return huggingface_embedding
             
         except Exception as e:
-            print(f"⚠ Error generating document embeddings: {e}")
+            print(f"Error generating document embeddings: {e}")
             print("This may be due to missing model files or network issues\n")
             return None
             
     except ImportError as e:
-        print(f"⚠ Error importing HuggingFace dependencies: {e}")
+        print(f"Error importing HuggingFace dependencies: {e}")
         print("Please install sentence-transformers:")
         print("pip install sentence-transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with HuggingFace embedding: {e}")
+        print(f"Error with HuggingFace embedding: {e}")
         return None
 
 def exercises(chunks):
@@ -232,7 +232,7 @@ def exercises(chunks):
     print("=== Exercises ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for exercises. Skipping this section.")
+        print("No chunks available for exercises. Skipping this section.")
         return
     
     # Exercise 1 - Using another watsonx embedding model
@@ -255,21 +255,21 @@ def exercises(chunks):
             params=embed_params,
         )
         
-        print("✓ Alternative Watsonx embedding model created successfully")
+        print("Alternative Watsonx embedding model created successfully")
         
         try:
             doc_result = watsonx_embedding_30m.embed_documents(chunks)
-            print(f"✓ Document embeddings generated with alternative model")
+            print(f"Document embeddings generated with alternative model")
             print(f"First 5 values of first document: {doc_result[0][:5]}")
             print("Note: This model has fewer parameters (30M vs 125M) but similar functionality\n")
         except Exception as e:
-            print(f"⚠ Error generating embeddings with alternative model: {e}")
+            print(f"Error generating embeddings with alternative model: {e}")
             print("This may be due to missing IBM Watson AI credentials\n")
             
     except ImportError as e:
-        print(f"⚠ Error importing dependencies for exercise: {e}")
+        print(f"Error importing dependencies for exercise: {e}")
     except Exception as e:
-        print(f"⚠ Error with exercise: {e}")
+        print(f"Error with exercise: {e}")
 
 def main():
     """Main function to demonstrate document embedding"""
@@ -278,7 +278,7 @@ def main():
     # Load and split data
     data, chunks = load_and_split_data()
     if not chunks:
-        print("⚠ Cannot proceed without document chunks.")
+        print("Cannot proceed without document chunks.")
         return
     
     # Demonstrate Watsonx embedding
@@ -293,9 +293,9 @@ def main():
     print("=== Demo Complete ===")
     print("You have successfully explored document embedding using:")
     if watsonx_model:
-        print("✓ Watsonx.ai embedding models")
+        print("Watsonx.ai embedding models")
     if huggingface_model:
-        print("✓ HuggingFace embedding models")
+        print("HuggingFace embedding models")
     
     print("\nKey takeaways:")
     print("- Document embedding converts text to numerical vectors")

@@ -29,13 +29,13 @@ def download_file(url, filename):
         try:
             import urllib.request
             urllib.request.urlretrieve(url, filename)
-            print(f"✓ {filename} downloaded successfully")
+            print(f"{filename} downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading {filename}: {e}")
+            print(f"Error downloading {filename}: {e}")
             print("Please download manually or check your internet connection")
             return False
     else:
-        print(f"✓ {filename} already exists")
+        print(f"{filename} already exists")
     return True
 
 def check_gpu():
@@ -47,20 +47,20 @@ def check_gpu():
         current_device = torch.cuda.current_device()
         gpu_name = torch.cuda.get_device_name(current_device)
         
-        print(f"✓ GPU Available: {gpu_name}")
-        print(f"✓ GPU Count: {gpu_count}")
-        print(f"✓ Current Device: {current_device}")
-        print(f"✓ CUDA Version: {torch.version.cuda}")
+        print(f"GPU Available: {gpu_name}")
+        print(f"GPU Count: {gpu_count}")
+        print(f"Current Device: {current_device}")
+        print(f"CUDA Version: {torch.version.cuda}")
         
         # Check memory
         memory_allocated = torch.cuda.memory_allocated(current_device) / 1024**3
         memory_reserved = torch.cuda.memory_reserved(current_device) / 1024**3
-        print(f"✓ Memory Allocated: {memory_allocated:.2f} GB")
-        print(f"✓ Memory Reserved: {memory_reserved:.2f} GB\n")
+        print(f"Memory Allocated: {memory_allocated:.2f} GB")
+        print(f"Memory Reserved: {memory_reserved:.2f} GB\n")
         
         return True
     else:
-        print("⚠ No GPU available. Using CPU instead.\n")
+        print("No GPU available. Using CPU instead.\n")
         return False
 
 def load_and_split_data():
@@ -72,7 +72,7 @@ def load_and_split_data():
         "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/i5V3ACEyz6hnYpVq6MTSvg/state-of-the-union.txt",
         "state-of-the-union.txt"
     ):
-        print("⚠ Cannot proceed without the sample document.")
+        print("Cannot proceed without the sample document.")
         return None, None
     
     # Load the document directly
@@ -84,11 +84,11 @@ def load_and_split_data():
         from langchain_core.documents import Document
         data = [Document(page_content=content, metadata={"source": "state-of-the-union.txt"})]
         
-        print(f"✓ Document loaded successfully. Number of documents: {len(data)}")
+        print(f"Document loaded successfully. Number of documents: {len(data)}")
         print(f"Document content preview: {data[0].page_content[:200]}...\n")
         
     except Exception as e:
-        print(f"⚠ Error loading document: {e}")
+        print(f"Error loading document: {e}")
         return None, None
     
     # Split the document into chunks
@@ -103,17 +103,17 @@ def load_and_split_data():
         )
         
         chunks = text_splitter.split_text(data[0].page_content)
-        print(f"✓ Document split into {len(chunks)} chunks")
+        print(f"Document split into {len(chunks)} chunks")
         print(f"First chunk preview: {chunks[0][:100]}...\n")
         
         return data, chunks
         
     except ImportError as e:
-        print(f"⚠ Error importing RecursiveCharacterTextSplitter: {e}")
+        print(f"Error importing RecursiveCharacterTextSplitter: {e}")
         print("Please install langchain: pip install langchain")
         return data, None
     except Exception as e:
-        print(f"⚠ Error splitting document: {e}")
+        print(f"Error splitting document: {e}")
         return data, None
 
 def demonstrate_chroma_vectorstore(chunks):
@@ -121,7 +121,7 @@ def demonstrate_chroma_vectorstore(chunks):
     print("=== Chroma DB Vector Store ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for vector store. Skipping this section.")
+        print("No chunks available for vector store. Skipping this section.")
         return None
     
     try:
@@ -138,7 +138,7 @@ def demonstrate_chroma_vectorstore(chunks):
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             model_kwargs={'device': device}
         )
-        print("✓ Embedding model created successfully")
+        print("Embedding model created successfully")
         
         # Create Chroma vector store
         vectorstore = Chroma.from_texts(
@@ -146,7 +146,7 @@ def demonstrate_chroma_vectorstore(chunks):
             embedding=embedding_model,
             collection_name="state_of_union_chroma"
         )
-        print("✓ Chroma DB vector store created successfully")
+        print("Chroma DB vector store created successfully")
         
         # Test similarity search
         print("--- Testing Similarity Search ---")
@@ -155,7 +155,7 @@ def demonstrate_chroma_vectorstore(chunks):
         
         try:
             docs = vectorstore.similarity_search(query, k=3)
-            print(f"✓ Similarity search completed successfully")
+            print(f"Similarity search completed successfully")
             print(f"Retrieved {len(docs)} documents")
             
             for i, doc in enumerate(docs):
@@ -166,7 +166,7 @@ def demonstrate_chroma_vectorstore(chunks):
             # Test similarity search with scores
             print("\n--- Testing Similarity Search with Scores ---")
             docs_with_scores = vectorstore.similarity_search_with_score(query, k=3)
-            print(f"✓ Similarity search with scores completed successfully")
+            print(f"Similarity search with scores completed successfully")
             
             for i, (doc, score) in enumerate(docs_with_scores):
                 print(f"\nDocument {i+1} (Score: {score:.4f}):")
@@ -175,15 +175,15 @@ def demonstrate_chroma_vectorstore(chunks):
             return vectorstore
             
         except Exception as e:
-            print(f"⚠ Error during similarity search: {e}")
+            print(f"Error during similarity search: {e}")
             return None
             
     except ImportError as e:
-        print(f"⚠ Error importing dependencies: {e}")
+        print(f"Error importing dependencies: {e}")
         print("Please install required packages: pip install chromadb sentence-transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with Chroma DB: {e}")
+        print(f"Error with Chroma DB: {e}")
         return None
 
 def demonstrate_faiss_vectorstore(chunks):
@@ -191,7 +191,7 @@ def demonstrate_faiss_vectorstore(chunks):
     print("=== FAISS Vector Store ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for vector store. Skipping this section.")
+        print("No chunks available for vector store. Skipping this section.")
         return None
     
     try:
@@ -208,14 +208,14 @@ def demonstrate_faiss_vectorstore(chunks):
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             model_kwargs={'device': device}
         )
-        print("✓ Embedding model created successfully")
+        print("Embedding model created successfully")
         
         # Create FAISS vector store
         vectorstore = FAISS.from_texts(
             texts=chunks,
             embedding=embedding_model
         )
-        print("✓ FAISS vector store created successfully")
+        print("FAISS vector store created successfully")
         
         # Test similarity search
         print("--- Testing Similarity Search ---")
@@ -224,7 +224,7 @@ def demonstrate_faiss_vectorstore(chunks):
         
         try:
             docs = vectorstore.similarity_search(query, k=3)
-            print(f"✓ Similarity search completed successfully")
+            print(f"Similarity search completed successfully")
             print(f"Retrieved {len(docs)} documents")
             
             for i, doc in enumerate(docs):
@@ -235,7 +235,7 @@ def demonstrate_faiss_vectorstore(chunks):
             # Test similarity search with scores
             print("\n--- Testing Similarity Search with Scores ---")
             docs_with_scores = vectorstore.similarity_search_with_score(query, k=3)
-            print(f"✓ Similarity search with scores completed successfully")
+            print(f"Similarity search with scores completed successfully")
             
             for i, (doc, score) in enumerate(docs_with_scores):
                 print(f"\nDocument {i+1} (Score: {score:.4f}):")
@@ -244,15 +244,15 @@ def demonstrate_faiss_vectorstore(chunks):
             return vectorstore
             
         except Exception as e:
-            print(f"⚠ Error during similarity search: {e}")
+            print(f"Error during similarity search: {e}")
             return None
             
     except ImportError as e:
-        print(f"⚠ Error importing dependencies: {e}")
+        print(f"Error importing dependencies: {e}")
         print("Please install required packages: pip install faiss-cpu sentence-transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with FAISS: {e}")
+        print(f"Error with FAISS: {e}")
         return None
 
 def demonstrate_hybrid_search(chunks):
@@ -260,7 +260,7 @@ def demonstrate_hybrid_search(chunks):
     print("=== Hybrid Search Demonstration ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for hybrid search. Skipping this section.")
+        print("No chunks available for hybrid search. Skipping this section.")
         return None
     
     try:
@@ -279,7 +279,7 @@ def demonstrate_hybrid_search(chunks):
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             model_kwargs={'device': device}
         )
-        print("✓ Embedding model created successfully")
+        print("Embedding model created successfully")
         
         # Create vector store
         vectorstore = Chroma.from_texts(
@@ -287,19 +287,19 @@ def demonstrate_hybrid_search(chunks):
             embedding=embedding_model,
             collection_name="state_of_union_hybrid"
         )
-        print("✓ Vector store created successfully")
+        print("Vector store created successfully")
         
         # Create BM25 retriever (keyword-based)
         try:
             bm25_retriever = BM25Retriever.from_texts(chunks)
-            print("✓ BM25 retriever created successfully")
+            print("BM25 retriever created successfully")
         except Exception as e:
-            print(f"⚠ Error creating BM25 retriever: {e}")
+            print(f"Error creating BM25 retriever: {e}")
             bm25_retriever = None
         
         # Create vector store retriever
         vector_retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
-        print("✓ Vector store retriever created successfully")
+        print("Vector store retriever created successfully")
         
         # Create ensemble retriever if both are available
         if bm25_retriever:
@@ -307,7 +307,7 @@ def demonstrate_hybrid_search(chunks):
                 retrievers=[bm25_retriever, vector_retriever],
                 weights=[0.3, 0.7]  # Give more weight to semantic search
             )
-            print("✓ Ensemble retriever created successfully")
+            print("Ensemble retriever created successfully")
             
             # Test hybrid search
             print("--- Testing Hybrid Search ---")
@@ -316,7 +316,7 @@ def demonstrate_hybrid_search(chunks):
             
             try:
                 docs = ensemble_retriever.get_relevant_documents(query)
-                print(f"✓ Hybrid search completed successfully")
+                print(f"Hybrid search completed successfully")
                 print(f"Retrieved {len(docs)} documents")
                 
                 for i, doc in enumerate(docs[:3]):  # Show first 3
@@ -327,18 +327,18 @@ def demonstrate_hybrid_search(chunks):
                 return ensemble_retriever
                 
             except Exception as e:
-                print(f"⚠ Error during hybrid search: {e}")
+                print(f"Error during hybrid search: {e}")
                 return vector_retriever
         else:
-            print("⚠ Using vector store retriever only (BM25 not available)")
+            print("Using vector store retriever only (BM25 not available)")
             return vector_retriever
             
     except ImportError as e:
-        print(f"⚠ Error importing dependencies: {e}")
+        print(f"Error importing dependencies: {e}")
         print("Please install required packages: pip install chromadb sentence-transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with hybrid search: {e}")
+        print(f"Error with hybrid search: {e}")
         return None
 
 def demonstrate_persistence_and_loading(chunks):
@@ -346,7 +346,7 @@ def demonstrate_persistence_and_loading(chunks):
     print("=== Persistence and Loading Demonstration ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for persistence demo. Skipping this section.")
+        print("No chunks available for persistence demo. Skipping this section.")
         return None
     
     try:
@@ -363,7 +363,7 @@ def demonstrate_persistence_and_loading(chunks):
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             model_kwargs={'device': device}
         )
-        print("✓ Embedding model created successfully")
+        print("Embedding model created successfully")
         
         # Create and save Chroma DB
         print("--- Chroma DB Persistence ---")
@@ -372,10 +372,10 @@ def demonstrate_persistence_and_loading(chunks):
             embedding=embedding_model,
             collection_name="persistent_chroma"
         )
-        print("✓ Chroma DB created successfully")
+        print("Chroma DB created successfully")
         
         # Chroma DB persists automatically to disk
-        print("✓ Chroma DB automatically persisted to disk")
+        print("Chroma DB automatically persisted to disk")
         
         # Create and save FAISS
         print("\n--- FAISS Persistence ---")
@@ -383,31 +383,31 @@ def demonstrate_persistence_and_loading(chunks):
             texts=chunks,
             embedding=embedding_model
         )
-        print("✓ FAISS created successfully")
+        print("FAISS created successfully")
         
         # Save FAISS to disk
         faiss_path = "./faiss_index"
         faiss_store.save_local(faiss_path)
-        print(f"✓ FAISS saved to disk at: {faiss_path}")
+        print(f"FAISS saved to disk at: {faiss_path}")
         
         # Test loading FAISS
         print("\n--- Testing FAISS Loading ---")
         loaded_faiss = FAISS.load_local(faiss_path, embedding_model)
-        print("✓ FAISS loaded successfully from disk")
+        print("FAISS loaded successfully from disk")
         
         # Test loaded FAISS
         query = "economic policies"
         docs = loaded_faiss.similarity_search(query, k=2)
-        print(f"✓ Loaded FAISS search successful: {len(docs)} documents retrieved")
+        print(f"Loaded FAISS search successful: {len(docs)} documents retrieved")
         
         return {"chroma": chroma_store, "faiss": faiss_store, "loaded_faiss": loaded_faiss}
         
     except ImportError as e:
-        print(f"⚠ Error importing dependencies: {e}")
+        print(f"Error importing dependencies: {e}")
         print("Please install required packages: pip install chromadb faiss-cpu sentence-transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with persistence demo: {e}")
+        print(f"Error with persistence demo: {e}")
         return None
 
 def exercises(chunks):
@@ -415,7 +415,7 @@ def exercises(chunks):
     print("=== Exercises ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for exercises. Skipping this section.")
+        print("No chunks available for exercises. Skipping this section.")
         return
     
     # Exercise 1 - Compare different vector stores
@@ -452,8 +452,8 @@ def exercises(chunks):
         )
         faiss_time = time.time() - start_time
         
-        print(f"✓ Chroma DB creation time: {chroma_time:.2f} seconds")
-        print(f"✓ FAISS creation time: {faiss_time:.2f} seconds")
+        print(f"Chroma DB creation time: {chroma_time:.2f} seconds")
+        print(f"FAISS creation time: {faiss_time:.2f} seconds")
         
         if chroma_time < faiss_time:
             print("Chroma DB was faster for this dataset")
@@ -461,7 +461,7 @@ def exercises(chunks):
             print("FAISS was faster for this dataset")
         
     except Exception as e:
-        print(f"⚠ Error with vector store comparison: {e}")
+        print(f"Error with vector store comparison: {e}")
     
     # Exercise 2 - Custom similarity function
     print("\n--- Exercise 2: Custom Similarity Function ---")
@@ -481,11 +481,11 @@ def exercises(chunks):
         sample_text = chunks[0] if chunks else "Sample text about economic policies"
         
         similarity_score = keyword_similarity(query, sample_text)
-        print(f"✓ Keyword similarity score: {similarity_score:.4f}")
+        print(f"Keyword similarity score: {similarity_score:.4f}")
         print("Note: This is a simple Jaccard similarity implementation")
         
     except Exception as e:
-        print(f"⚠ Error with custom similarity: {e}")
+        print(f"Error with custom similarity: {e}")
 
 def main():
     """Main function to demonstrate vector stores"""
@@ -497,7 +497,7 @@ def main():
     # Load and split data
     data, chunks = load_and_split_data()
     if not chunks:
-        print("⚠ Cannot proceed without document chunks.")
+        print("Cannot proceed without document chunks.")
         return
     
     # Demonstrate different vector stores
@@ -512,13 +512,13 @@ def main():
     print("=== Demo Complete ===")
     print("You have successfully explored vector stores:")
     if chroma_store:
-        print("✓ Chroma DB Vector Store")
+        print("Chroma DB Vector Store")
     if faiss_store:
-        print("✓ FAISS Vector Store")
+        print("FAISS Vector Store")
     if hybrid_retriever:
-        print("✓ Hybrid Search (Ensemble)")
+        print("Hybrid Search (Ensemble)")
     if persistent_stores:
-        print("✓ Persistence and Loading")
+        print("Persistence and Loading")
     
     print(f"\nGPU Acceleration: {'Enabled' if gpu_available else 'Disabled'}")
     

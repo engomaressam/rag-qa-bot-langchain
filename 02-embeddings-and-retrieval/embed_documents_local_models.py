@@ -26,13 +26,13 @@ def download_file(url, filename):
         try:
             import urllib.request
             urllib.request.urlretrieve(url, filename)
-            print(f"✓ {filename} downloaded successfully")
+            print(f"{filename} downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading {filename}: {e}")
+            print(f"Error downloading {filename}: {e}")
             print("Please download manually or check your internet connection")
             return False
     else:
-        print(f"✓ {filename} already exists")
+        print(f"{filename} already exists")
     return True
 
 def check_gpu():
@@ -44,20 +44,20 @@ def check_gpu():
         current_device = torch.cuda.current_device()
         gpu_name = torch.cuda.get_device_name(current_device)
         
-        print(f"✓ GPU Available: {gpu_name}")
-        print(f"✓ GPU Count: {gpu_count}")
-        print(f"✓ Current Device: {current_device}")
-        print(f"✓ CUDA Version: {torch.version.cuda}")
+        print(f"GPU Available: {gpu_name}")
+        print(f"GPU Count: {gpu_count}")
+        print(f"Current Device: {current_device}")
+        print(f"CUDA Version: {torch.version.cuda}")
         
         # Check memory
         memory_allocated = torch.cuda.memory_allocated(current_device) / 1024**3
         memory_reserved = torch.cuda.memory_reserved(current_device) / 1024**3
-        print(f"✓ Memory Allocated: {memory_allocated:.2f} GB")
-        print(f"✓ Memory Reserved: {memory_reserved:.2f} GB\n")
+        print(f"Memory Allocated: {memory_allocated:.2f} GB")
+        print(f"Memory Reserved: {memory_reserved:.2f} GB\n")
         
         return True
     else:
-        print("⚠ No GPU available. Using CPU instead.\n")
+        print("No GPU available. Using CPU instead.\n")
         return False
 
 def load_and_split_data():
@@ -69,7 +69,7 @@ def load_and_split_data():
         "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/i5V3ACEyz6hnYpVq6MTSvg/state-of-the-union.txt",
         "state-of-the-union.txt"
     ):
-        print("⚠ Cannot proceed without the sample document.")
+        print("Cannot proceed without the sample document.")
         return None, None
     
     # Load the document directly
@@ -81,11 +81,11 @@ def load_and_split_data():
         from langchain_core.documents import Document
         data = [Document(page_content=content, metadata={"source": "state-of-the-union.txt"})]
         
-        print(f"✓ Document loaded successfully. Number of documents: {len(data)}")
+        print(f"Document loaded successfully. Number of documents: {len(data)}")
         print(f"Document content preview: {data[0].page_content[:200]}...\n")
         
     except Exception as e:
-        print(f"⚠ Error loading document: {e}")
+        print(f"Error loading document: {e}")
         return None, None
     
     # Split the document into chunks
@@ -100,17 +100,17 @@ def load_and_split_data():
         )
         
         chunks = text_splitter.split_text(data[0].page_content)
-        print(f"✓ Document split into {len(chunks)} chunks")
+        print(f"Document split into {len(chunks)} chunks")
         print(f"First chunk preview: {chunks[0][:100]}...\n")
         
         return data, chunks
         
     except ImportError as e:
-        print(f"⚠ Error importing RecursiveCharacterTextSplitter: {e}")
+        print(f"Error importing RecursiveCharacterTextSplitter: {e}")
         print("Please install langchain: pip install langchain")
         return data, None
     except Exception as e:
-        print(f"⚠ Error splitting document: {e}")
+        print(f"Error splitting document: {e}")
         return data, None
 
 def demonstrate_sentence_transformers_embedding(chunks):
@@ -118,7 +118,7 @@ def demonstrate_sentence_transformers_embedding(chunks):
     print("=== Sentence Transformers Embedding Model ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for embedding. Skipping this section.")
+        print("No chunks available for embedding. Skipping this section.")
         return None
     
     try:
@@ -140,7 +140,7 @@ def demonstrate_sentence_transformers_embedding(chunks):
         print(f"Using device: {device}")
         
         model = SentenceTransformer(model_name, device=device)
-        print("✓ Sentence Transformers model created successfully\n")
+        print("Sentence Transformers model created successfully\n")
         
         # Query embeddings
         print("--- Query Embeddings ---")
@@ -149,18 +149,18 @@ def demonstrate_sentence_transformers_embedding(chunks):
         
         try:
             query_result = model.encode(query)
-            print(f"✓ Query embedding generated successfully")
+            print(f"Query embedding generated successfully")
             print(f"Embedding dimension: {len(query_result)}")
             print(f"First 5 values: {query_result[:5]}\n")
         except Exception as e:
-            print(f"⚠ Error generating query embedding: {e}")
+            print(f"Error generating query embedding: {e}")
             return None
         
         # Document embeddings
         print("--- Document Embeddings ---")
         try:
             doc_result = model.encode(chunks)
-            print(f"✓ Document embeddings generated successfully")
+            print(f"Document embeddings generated successfully")
             print(f"Number of document embeddings: {len(doc_result)}")
             print(f"First document embedding dimension: {len(doc_result[0])}")
             print(f"First 5 values of first document: {doc_result[0][:5]}\n")
@@ -168,15 +168,15 @@ def demonstrate_sentence_transformers_embedding(chunks):
             return model
             
         except Exception as e:
-            print(f"⚠ Error generating document embeddings: {e}")
+            print(f"Error generating document embeddings: {e}")
             return None
             
     except ImportError as e:
-        print(f"⚠ Error importing SentenceTransformers: {e}")
+        print(f"Error importing SentenceTransformers: {e}")
         print("Please install sentence-transformers: pip install sentence-transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with SentenceTransformers embedding: {e}")
+        print(f"Error with SentenceTransformers embedding: {e}")
         return None
 
 def demonstrate_huggingface_embedding(chunks):
@@ -184,7 +184,7 @@ def demonstrate_huggingface_embedding(chunks):
     print("=== Hugging Face Embedding Model ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for embedding. Skipping this section.")
+        print("No chunks available for embedding. Skipping this section.")
         return None
     
     try:
@@ -208,7 +208,7 @@ def demonstrate_huggingface_embedding(chunks):
             model_name=model_name,
             model_kwargs={'device': device}
         )
-        print("✓ HuggingFace embedding model created successfully\n")
+        print("HuggingFace embedding model created successfully\n")
         
         # Query embeddings
         print("--- Query Embeddings ---")
@@ -217,18 +217,18 @@ def demonstrate_huggingface_embedding(chunks):
         
         try:
             query_result = huggingface_embedding.embed_query(query)
-            print(f"✓ Query embedding generated successfully")
+            print(f"Query embedding generated successfully")
             print(f"Embedding dimension: {len(query_result)}")
             print(f"First 5 values: {query_result[:5]}\n")
         except Exception as e:
-            print(f"⚠ Error generating query embedding: {e}")
+            print(f"Error generating query embedding: {e}")
             return None
         
         # Document embeddings
         print("--- Document Embeddings ---")
         try:
             doc_result = huggingface_embedding.embed_documents(chunks)
-            print(f"✓ Document embeddings generated successfully")
+            print(f"Document embeddings generated successfully")
             print(f"Number of document embeddings: {len(doc_result)}")
             print(f"First document embedding dimension: {len(doc_result[0])}")
             print(f"First 5 values of first document: {doc_result[0][:5]}\n")
@@ -236,15 +236,15 @@ def demonstrate_huggingface_embedding(chunks):
             return huggingface_embedding
             
         except Exception as e:
-            print(f"⚠ Error generating document embeddings: {e}")
+            print(f"Error generating document embeddings: {e}")
             return None
             
     except ImportError as e:
-        print(f"⚠ Error importing HuggingFace dependencies: {e}")
+        print(f"Error importing HuggingFace dependencies: {e}")
         print("Please install sentence-transformers: pip install sentence-transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with HuggingFace embedding: {e}")
+        print(f"Error with HuggingFace embedding: {e}")
         return None
 
 def demonstrate_custom_embedding(chunks):
@@ -252,7 +252,7 @@ def demonstrate_custom_embedding(chunks):
     print("=== Custom Transformers Embedding ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for embedding. Skipping this section.")
+        print("No chunks available for embedding. Skipping this section.")
         return None
     
     try:
@@ -275,7 +275,7 @@ def demonstrate_custom_embedding(chunks):
         
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModel.from_pretrained(model_name).to(device)
-        print("✓ Custom transformers model created successfully\n")
+        print("Custom transformers model created successfully\n")
         
         # Query embeddings
         print("--- Query Embeddings ---")
@@ -293,11 +293,11 @@ def demonstrate_custom_embedding(chunks):
                 embeddings = outputs.last_hidden_state.mean(dim=1)
                 query_result = embeddings.cpu().numpy()[0]
             
-            print(f"✓ Query embedding generated successfully")
+            print(f"Query embedding generated successfully")
             print(f"Embedding dimension: {len(query_result)}")
             print(f"First 5 values: {query_result[:5]}\n")
         except Exception as e:
-            print(f"⚠ Error generating query embedding: {e}")
+            print(f"Error generating query embedding: {e}")
             return None
         
         # Document embeddings
@@ -313,7 +313,7 @@ def demonstrate_custom_embedding(chunks):
                     embeddings = outputs.last_hidden_state.mean(dim=1)
                     doc_results.append(embeddings.cpu().numpy()[0])
             
-            print(f"✓ Document embeddings generated successfully")
+            print(f"Document embeddings generated successfully")
             print(f"Number of document embeddings: {len(doc_results)}")
             print(f"First document embedding dimension: {len(doc_results[0])}")
             print(f"First 5 values of first document: {doc_results[0][:5]}\n")
@@ -321,15 +321,15 @@ def demonstrate_custom_embedding(chunks):
             return {"tokenizer": tokenizer, "model": model}
             
         except Exception as e:
-            print(f"⚠ Error generating document embeddings: {e}")
+            print(f"Error generating document embeddings: {e}")
             return None
             
     except ImportError as e:
-        print(f"⚠ Error importing transformers: {e}")
+        print(f"Error importing transformers: {e}")
         print("Please install transformers: pip install transformers")
         return None
     except Exception as e:
-        print(f"⚠ Error with custom embedding: {e}")
+        print(f"Error with custom embedding: {e}")
         return None
 
 def exercises(chunks):
@@ -337,7 +337,7 @@ def exercises(chunks):
     print("=== Exercises ===\n")
     
     if not chunks:
-        print("⚠ No chunks available for exercises. Skipping this section.")
+        print("No chunks available for exercises. Skipping this section.")
         return
     
     # Exercise 1 - Using another embedding model
@@ -351,20 +351,20 @@ def exercises(chunks):
         model_name = "sentence-transformers/all-MiniLM-L6-v2"
         model = SentenceTransformer(model_name, device=device)
         
-        print("✓ Alternative embedding model created successfully")
+        print("Alternative embedding model created successfully")
         
         try:
             doc_result = model.encode(chunks[:3])  # Process first 3 chunks
-            print(f"✓ Document embeddings generated with alternative model")
+            print(f"Document embeddings generated with alternative model")
             print(f"First 5 values of first document: {doc_result[0][:5]}")
             print("Note: This model has smaller embeddings (384 vs 768) but is faster\n")
         except Exception as e:
-            print(f"⚠ Error generating embeddings with alternative model: {e}\n")
+            print(f"Error generating embeddings with alternative model: {e}\n")
             
     except ImportError as e:
-        print(f"⚠ Error importing dependencies for exercise: {e}")
+        print(f"Error importing dependencies for exercise: {e}")
     except Exception as e:
-        print(f"⚠ Error with exercise: {e}")
+        print(f"Error with exercise: {e}")
 
 def main():
     """Main function to demonstrate local document embedding"""
@@ -376,7 +376,7 @@ def main():
     # Load and split data
     data, chunks = load_and_split_data()
     if not chunks:
-        print("⚠ Cannot proceed without document chunks.")
+        print("Cannot proceed without document chunks.")
         return
     
     # Demonstrate different embedding approaches
@@ -390,11 +390,11 @@ def main():
     print("=== Demo Complete ===")
     print("You have successfully explored local document embedding using:")
     if sentence_transformers_model:
-        print("✓ Sentence Transformers (all-mpnet-base-v2)")
+        print("Sentence Transformers (all-mpnet-base-v2)")
     if huggingface_model:
-        print("✓ HuggingFace Embeddings (all-MiniLM-L6-v2)")
+        print("HuggingFace Embeddings (all-MiniLM-L6-v2)")
     if custom_model:
-        print("✓ Custom Transformers implementation")
+        print("Custom Transformers implementation")
     
     print(f"\nGPU Acceleration: {'Enabled' if gpu_available else 'Disabled'}")
     

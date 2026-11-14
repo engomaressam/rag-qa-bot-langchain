@@ -28,13 +28,13 @@ def download_file(url, filename):
         try:
             import urllib.request
             urllib.request.urlretrieve(url, filename)
-            print(f"✓ {filename} downloaded successfully")
+            print(f"{filename} downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading {filename}: {e}")
+            print(f"Error downloading {filename}: {e}")
             print("Please download manually or check your internet connection")
             return False
     else:
-        print(f"✓ {filename} already exists")
+        print(f"{filename} already exists")
     return True
 
 def load_and_split_text():
@@ -46,7 +46,7 @@ def load_and_split_text():
         "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/BYlUHaillwM8EUItaIytHQ/companypolicies.txt",
         "companypolicies.txt"
     ):
-        print("⚠ Cannot proceed without the sample document.")
+        print("Cannot proceed without the sample document.")
         return None, None
     
     # Load the document using LangChain's TextLoader
@@ -55,15 +55,15 @@ def load_and_split_text():
         
         loader = TextLoader("companypolicies.txt")
         data = loader.load()
-        print(f"✓ Document loaded successfully. Number of documents: {len(data)}")
+        print(f"Document loaded successfully. Number of documents: {len(data)}")
         print(f"Document preview: {data[0].page_content[:200]}...\n")
         
     except ImportError as e:
-        print(f"⚠ Error importing TextLoader: {e}")
+        print(f"Error importing TextLoader: {e}")
         print("Please install langchain-community: pip install langchain-community")
         return None, None
     except Exception as e:
-        print(f"⚠ Error loading document: {e}")
+        print(f"Error loading document: {e}")
         return None, None
     
     # Split the document into chunks
@@ -78,17 +78,17 @@ def load_and_split_text():
         )
         
         chunks = text_splitter.split_documents(data)
-        print(f"✓ Document split into {len(chunks)} chunks")
+        print(f"Document split into {len(chunks)} chunks")
         print(f"First chunk preview: {chunks[0].page_content[:100]}...\n")
         
         return data, chunks
         
     except ImportError as e:
-        print(f"⚠ Error importing RecursiveCharacterTextSplitter: {e}")
+        print(f"Error importing RecursiveCharacterTextSplitter: {e}")
         print("Please install langchain: pip install langchain")
         return data, None
     except Exception as e:
-        print(f"⚠ Error splitting document: {e}")
+        print(f"Error splitting document: {e}")
         return data, None
 
 def build_embedding_model():
@@ -111,19 +111,19 @@ def build_embedding_model():
             params=embed_params,
         )
         
-        print("✓ Watsonx embedding model created successfully")
+        print("Watsonx embedding model created successfully")
         print("Model: ibm/slate-125m-english-rtrvr")
         print("Embedding dimension: 768\n")
         
         return watsonx_embedding
         
     except ImportError as e:
-        print(f"⚠ Error importing Watsonx dependencies: {e}")
+        print(f"Error importing Watsonx dependencies: {e}")
         print("Please install ibm-watsonx-ai and langchain-ibm:")
         print("pip install ibm-watsonx-ai langchain-ibm")
         return None
     except Exception as e:
-        print(f"⚠ Error building embedding model: {e}")
+        print(f"Error building embedding model: {e}")
         return None
 
 def demonstrate_chroma_db(chunks, embedding_model):
@@ -131,7 +131,7 @@ def demonstrate_chroma_db(chunks, embedding_model):
     print("=== Chroma DB Vector Store ===\n")
     
     if not chunks or not embedding_model:
-        print("⚠ No chunks or embedding model available. Skipping this section.")
+        print("No chunks or embedding model available. Skipping this section.")
         return None
     
     try:
@@ -141,11 +141,11 @@ def demonstrate_chroma_db(chunks, embedding_model):
         
         # Create ID list for unique identifiers
         ids = [str(i) for i in range(0, len(chunks))]
-        print(f"✓ Created {len(ids)} unique IDs for chunks")
+        print(f"Created {len(ids)} unique IDs for chunks")
         
         # Create embeddings and store in Chroma database
         vectordb = Chroma.from_documents(chunks, embedding_model, ids=ids)
-        print("✓ Vector database created successfully")
+        print("Vector database created successfully")
         
         # Display some chunks from the database
         print("\n--- Displaying Chunks from Database ---")
@@ -155,16 +155,16 @@ def demonstrate_chroma_db(chunks, embedding_model):
         
         # Check database count
         count = vectordb._collection.count()
-        print(f"\n✓ Total chunks in database: {count}")
+        print(f"\nTotal chunks in database: {count}")
         
         return vectordb
         
     except ImportError as e:
-        print(f"⚠ Error importing Chroma: {e}")
+        print(f"Error importing Chroma: {e}")
         print("Please install chromadb: pip install chromadb")
         return None
     except Exception as e:
-        print(f"⚠ Error with Chroma DB: {e}")
+        print(f"Error with Chroma DB: {e}")
         return None
 
 def demonstrate_chroma_similarity_search(vectordb):
@@ -172,7 +172,7 @@ def demonstrate_chroma_similarity_search(vectordb):
     print("\n--- Similarity Search in Chroma DB ---")
     
     if not vectordb:
-        print("⚠ No vector database available. Skipping this section.")
+        print("No vector database available. Skipping this section.")
         return
     
     try:
@@ -181,25 +181,25 @@ def demonstrate_chroma_similarity_search(vectordb):
         
         # Default similarity search (top 4 results)
         docs = vectordb.similarity_search(query)
-        print(f"✓ Default search retrieved {len(docs)} documents")
+        print(f"Default search retrieved {len(docs)} documents")
         print("First result preview:")
         print(f"  {docs[0].page_content[:200]}...\n")
         
         # Search with k=1 (top 1 result)
         print("--- Search with k=1 ---")
         single_doc = vectordb.similarity_search(query, k=1)
-        print(f"✓ Retrieved top 1 result:")
+        print(f"Retrieved top 1 result:")
         print(f"  {single_doc[0].page_content[:200]}...\n")
         
     except Exception as e:
-        print(f"⚠ Error with similarity search: {e}")
+        print(f"Error with similarity search: {e}")
 
 def demonstrate_faiss_db(chunks, embedding_model):
     """Demonstrate FAISS vector store"""
     print("\n=== FAISS Vector Store ===\n")
     
     if not chunks or not embedding_model:
-        print("⚠ No chunks or embedding model available. Skipping this section.")
+        print("No chunks or embedding model available. Skipping this section.")
         return None
     
     try:
@@ -212,7 +212,7 @@ def demonstrate_faiss_db(chunks, embedding_model):
         
         # Create embeddings and store in FAISS database
         faissdb = FAISS.from_documents(chunks, embedding_model, ids=ids)
-        print("✓ FAISS vector database created successfully")
+        print("FAISS vector database created successfully")
         
         # Display some chunks from the database
         print("\n--- Displaying Chunks from FAISS Database ---")
@@ -223,11 +223,11 @@ def demonstrate_faiss_db(chunks, embedding_model):
         return faissdb
         
     except ImportError as e:
-        print(f"⚠ Error importing FAISS: {e}")
+        print(f"Error importing FAISS: {e}")
         print("Please install faiss-cpu: pip install faiss-cpu")
         return None
     except Exception as e:
-        print(f"⚠ Error with FAISS DB: {e}")
+        print(f"Error with FAISS DB: {e}")
         return None
 
 def demonstrate_faiss_similarity_search(faissdb):
@@ -235,7 +235,7 @@ def demonstrate_faiss_similarity_search(faissdb):
     print("\n--- Similarity Search in FAISS DB ---")
     
     if not faissdb:
-        print("⚠ No FAISS database available. Skipping this section.")
+        print("No FAISS database available. Skipping this section.")
         return
     
     try:
@@ -243,21 +243,21 @@ def demonstrate_faiss_similarity_search(faissdb):
         print(f"Query: '{query}'")
         
         docs = faissdb.similarity_search(query)
-        print(f"✓ FAISS search retrieved {len(docs)} documents")
+        print(f"FAISS search retrieved {len(docs)} documents")
         print("First result preview:")
         print(f"  {docs[0].page_content[:200]}...\n")
         
         print("Note: Results should be similar to Chroma DB as both use the same embedding model")
         
     except Exception as e:
-        print(f"⚠ Error with FAISS similarity search: {e}")
+        print(f"Error with FAISS similarity search: {e}")
 
 def demonstrate_vector_store_management(vectordb):
     """Demonstrate managing vector store: adding, updating, and deleting entries"""
     print("\n=== Managing Vector Store ===\n")
     
     if not vectordb:
-        print("⚠ No vector database available. Skipping this section.")
+        print("No vector database available. Skipping this section.")
         return
     
     try:
@@ -278,7 +278,7 @@ def demonstrate_vector_store_management(vectordb):
         )
         
         new_chunks = [new_chunk]
-        print(f"✓ Created new document: '{text}'")
+        print(f"Created new document: '{text}'")
         
         # Check if ID 215 exists (should be empty)
         print("\n--- Checking Existing ID 215 ---")
@@ -288,11 +288,11 @@ def demonstrate_vector_store_management(vectordb):
         # Add new document
         print("\n--- Adding Document to Database ---")
         vectordb.add_documents(new_chunks, ids=["215"])
-        print("✓ New document added with ID 215")
+        print("New document added with ID 215")
         
         # Check count
         count = vectordb._collection.count()
-        print(f"✓ Total chunks in database: {count}")
+        print(f"Total chunks in database: {count}")
         
         # Display newly added document
         print("\n--- Displaying Newly Added Document ---")
@@ -310,7 +310,7 @@ def demonstrate_vector_store_management(vectordb):
         )
         
         vectordb.update_document('215', update_chunk)
-        print("✓ Document updated successfully")
+        print("Document updated successfully")
         
         # Display updated document
         updated_doc = vectordb._collection.get(ids=['215'])
@@ -319,21 +319,21 @@ def demonstrate_vector_store_management(vectordb):
         # Delete document
         print("\n--- Deleting Document ---")
         vectordb._collection.delete(ids=['215'])
-        print("✓ Document deleted successfully")
+        print("Document deleted successfully")
         
         # Verify deletion
         deleted_doc = vectordb._collection.get(ids=['215'])
         print(f"Deleted document content: {deleted_doc}")
         
     except Exception as e:
-        print(f"⚠ Error with vector store management: {e}")
+        print(f"Error with vector store management: {e}")
 
 def exercises(vectordb):
     """Complete the exercises from the notebook"""
     print("\n=== Exercises ===\n")
     
     if not vectordb:
-        print("⚠ No vector database available for exercises. Skipping this section.")
+        print("No vector database available for exercises. Skipping this section.")
         return
     
     # Exercise 1: Use another query to conduct similarity search
@@ -342,12 +342,12 @@ def exercises(vectordb):
     
     try:
         docs = vectordb.similarity_search("Smoking policy")
-        print(f"✓ Retrieved {len(docs)} documents for 'Smoking policy'")
+        print(f"Retrieved {len(docs)} documents for 'Smoking policy'")
         print("First result preview:")
         print(f"  {docs[0].page_content[:200]}...\n")
         
     except Exception as e:
-        print(f"⚠ Error with exercise: {e}")
+        print(f"Error with exercise: {e}")
 
 def main():
     """Main function to demonstrate vector stores"""
@@ -356,13 +356,13 @@ def main():
     # Load and split text
     data, chunks = load_and_split_text()
     if not chunks:
-        print("⚠ Cannot proceed without document chunks.")
+        print("Cannot proceed without document chunks.")
         return
     
     # Build embedding model
     embedding_model = build_embedding_model()
     if not embedding_model:
-        print("⚠ Cannot proceed without embedding model.")
+        print("Cannot proceed without embedding model.")
         return
     
     # Demonstrate Chroma DB

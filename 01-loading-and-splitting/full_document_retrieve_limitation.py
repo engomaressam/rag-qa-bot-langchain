@@ -66,9 +66,9 @@ def main():
         llama_llm = llm_model('meta-llama/llama-3-3-70b-instruct')
         response = llama_llm.invoke("How are you?")
         print(f"LLM Response: {response}")
-        print("✓ LLM is working correctly\n")
+        print("LLM is working correctly\n")
     except Exception as e:
-        print(f"⚠ Error with LLM: {e}")
+        print(f"Error with LLM: {e}")
         print("Note: You may need to set up proper credentials for watsonx.ai\n")
         return
     
@@ -84,9 +84,9 @@ def main():
                 "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/d_ahNwb1L2duIxBR6RD63Q/state-of-the-union.txt",
                 "state-of-the-union.txt"
             )
-            print("✓ state-of-the-union.txt downloaded successfully")
+            print("state-of-the-union.txt downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading document: {e}")
+            print(f"Error downloading document: {e}")
             print("Please download manually or check your internet connection")
             return
     
@@ -95,10 +95,10 @@ def main():
         loader = TextLoader("state-of-the-union.txt")
         data = loader.load()
         content = data[0].page_content
-        print(f"✓ Document loaded successfully. Length: {len(content)} characters")
+        print(f"Document loaded successfully. Length: {len(content)} characters")
         print(f"  Document contains approximately 8,235 tokens\n")
     except Exception as e:
-        print(f"⚠ Error loading document: {e}")
+        print(f"Error loading document: {e}")
         return
     
     # Demonstrate limitations of retrieving directly from full document
@@ -122,7 +122,7 @@ def main():
     """
     
     prompt_template = PromptTemplate(template=template, input_variables=['content', 'question'])
-    print("✓ Prompt template created successfully\n")
+    print("Prompt template created successfully\n")
     
     # Use mixtral model (longer context window)
     print("4. Testing with Mixtral model (longer context window)...")
@@ -134,9 +134,9 @@ def main():
         response = query_chain.invoke(input={'content': content, 'question': query})
         print(f"Query: {query}")
         print(f"Response: {response['text']}")
-        print("✓ Mixtral model successfully processed the full document\n")
+        print("Mixtral model successfully processed the full document\n")
     except Exception as e:
-        print(f"⚠ Error with Mixtral model: {e}")
+        print(f"Error with Mixtral model: {e}")
     
     # Use Llama 3 model
     print("5. Testing with Llama 3 model...")
@@ -147,9 +147,9 @@ def main():
         response = query_chain.invoke(input={'content': content, 'question': query})
         print(f"Query: {query}")
         print(f"Response: {response['text']}")
-        print("✓ Llama 3 model also successfully processed the full document\n")
+        print("Llama 3 model also successfully processed the full document\n")
     except Exception as e:
-        print(f"⚠ Error with Llama 3 model: {e}")
+        print(f"Error with Llama 3 model: {e}")
     
     # Key takeaway
     print("6. Key Takeaway:")
@@ -167,9 +167,9 @@ def main():
         response = query_chain.invoke(input={'content': content, 'question': query})
         print(f"Query: {query}")
         print(f"Response: {response['text']}")
-        print("✓ IBM Granite model test completed\n")
+        print("IBM Granite model test completed\n")
     except Exception as e:
-        print(f"⚠ Error with IBM Granite model: {e}")
+        print(f"Error with IBM Granite model: {e}")
         print("This demonstrates that different models may have different capabilities\n")
     
     print("=== Demo Complete ===")

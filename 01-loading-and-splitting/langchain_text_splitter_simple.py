@@ -23,13 +23,13 @@ def download_file(url, filename):
         try:
             import urllib.request
             urllib.request.urlretrieve(url, filename)
-            print(f"✓ {filename} downloaded successfully")
+            print(f"{filename} downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading {filename}: {e}")
+            print(f"Error downloading {filename}: {e}")
             print("Please download manually or check your internet connection")
             return False
     else:
-        print(f"✓ {filename} already exists")
+        print(f"{filename} already exists")
     return True
 
 def demonstrate_document_object():
@@ -53,10 +53,10 @@ def demonstrate_document_object():
         print("Document object created:")
         print(f"Page content: {doc.page_content}")
         print(f"Metadata: {doc.metadata}")
-        print("✓ Document object demonstrates the structure used by LangChain")
+        print("Document object demonstrates the structure used by LangChain")
         
     except ImportError as e:
-        print(f"⚠ Error importing Document: {e}")
+        print(f"Error importing Document: {e}")
         print("Please install langchain-core: pip install langchain-core")
 
 def split_by_character():
@@ -88,7 +88,7 @@ def split_by_character():
         
         # Split the text
         texts = text_splitter.split_text(companypolicies)
-        print(f"\n✓ Text split successfully into {len(texts)} chunks")
+        print(f"\nText split successfully into {len(texts)} chunks")
         
         # Show first few chunks
         print("\nFirst 3 chunks:")
@@ -102,16 +102,16 @@ def split_by_character():
             metadatas=[{"document": "Company Policies"}]
         )
         
-        print(f"✓ Created {len(texts_with_metadata)} document objects")
+        print(f"Created {len(texts_with_metadata)} document objects")
         print(f"First document: {texts_with_metadata[0]}")
         
         return texts
         
     except ImportError as e:
-        print(f"⚠ Error importing CharacterTextSplitter: {e}")
+        print(f"Error importing CharacterTextSplitter: {e}")
         print("Please install langchain: pip install langchain")
     except Exception as e:
-        print(f"⚠ Error with character splitting: {e}")
+        print(f"Error with character splitting: {e}")
 
 def split_recursively_by_character():
     """Demonstrate recursive character splitting"""
@@ -139,7 +139,7 @@ def split_recursively_by_character():
         
         # Split the text
         texts = text_splitter.create_documents([companypolicies])
-        print(f"\n✓ Text split recursively into {len(texts)} chunks")
+        print(f"\nText split recursively into {len(texts)} chunks")
         
         # Show first few chunks
         print("\nFirst 3 chunks:")
@@ -149,10 +149,10 @@ def split_recursively_by_character():
         return texts
         
     except ImportError as e:
-        print(f"⚠ Error importing RecursiveCharacterTextSplitter: {e}")
+        print(f"Error importing RecursiveCharacterTextSplitter: {e}")
         print("Please install langchain: pip install langchain")
     except Exception as e:
-        print(f"⚠ Error with recursive splitting: {e}")
+        print(f"Error with recursive splitting: {e}")
 
 def split_code():
     """Demonstrate splitting code by language"""
@@ -183,7 +183,7 @@ def split_code():
         )
         
         python_docs = python_splitter.create_documents([PYTHON_CODE])
-        print(f"✓ Python code split into {len(python_docs)} chunks")
+        print(f"Python code split into {len(python_docs)} chunks")
         
         for i, doc in enumerate(python_docs):
             print(f"Chunk {i+1}: {doc.page_content}")
@@ -206,7 +206,7 @@ def split_code():
         )
         
         js_docs = js_splitter.create_documents([JS_CODE])
-        print(f"✓ JavaScript code split into {len(js_docs)} chunks")
+        print(f"JavaScript code split into {len(js_docs)} chunks")
         
         for i, doc in enumerate(js_docs):
             print(f"Chunk {i+1}: {doc.page_content}")
@@ -214,10 +214,10 @@ def split_code():
         return python_docs, js_docs
         
     except ImportError as e:
-        print(f"⚠ Error importing code splitters: {e}")
+        print(f"Error importing code splitters: {e}")
         print("Please install langchain: pip install langchain")
     except Exception as e:
-        print(f"⚠ Error with code splitting: {e}")
+        print(f"Error with code splitting: {e}")
 
 def split_markdown_by_headers():
     """Demonstrate splitting markdown by headers"""
@@ -259,7 +259,7 @@ Hi this is Molly"""
         markdown_splitter = MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
         md_header_splits = markdown_splitter.split_text(md)
         
-        print(f"\n✓ Markdown split into {len(md_header_splits)} chunks (headers stripped)")
+        print(f"\nMarkdown split into {len(md_header_splits)} chunks (headers stripped)")
         
         for i, split in enumerate(md_header_splits):
             print(f"Chunk {i+1}:")
@@ -275,7 +275,7 @@ Hi this is Molly"""
         )
         md_header_splits_with_headers = markdown_splitter_with_headers.split_text(md)
         
-        print(f"✓ Markdown split into {len(md_header_splits_with_headers)} chunks (headers included)")
+        print(f"Markdown split into {len(md_header_splits_with_headers)} chunks (headers included)")
         
         for i, split in enumerate(md_header_splits_with_headers):
             print(f"Chunk {i+1}:")
@@ -286,10 +286,10 @@ Hi this is Molly"""
         return md_header_splits
         
     except ImportError as e:
-        print(f"⚠ Error importing MarkdownHeaderTextSplitter: {e}")
+        print(f"Error importing MarkdownHeaderTextSplitter: {e}")
         print("Please install langchain: pip install langchain")
     except Exception as e:
-        print(f"⚠ Error with markdown splitting: {e}")
+        print(f"Error with markdown splitting: {e}")
 
 def exercises():
     """Complete the exercises from the notebook"""
@@ -313,14 +313,14 @@ def exercises():
         )
         
         texts = text_splitter.split_text(companypolicies)
-        print(f"✓ Text split with '\\n' separator into {len(texts)} chunks")
+        print(f"Text split with '\\n' separator into {len(texts)} chunks")
         
         print("\nFirst 3 chunks with '\\n' separator:")
         for i, chunk in enumerate(texts[:3]):
             print(f"Chunk {i+1}: {chunk[:100]}...")
             
     except Exception as e:
-        print(f"⚠ Error with exercise 1: {e}")
+        print(f"Error with exercise 1: {e}")
     
     # Exercise 2 - Splitting Latex code
     print("\n--- Exercise 2: Splitting Latex code ---")
@@ -357,13 +357,13 @@ def exercises():
         )
         
         latex_docs = latex_splitter.create_documents([latex_text])
-        print(f"\n✓ LaTeX code split into {len(latex_docs)} chunks")
+        print(f"\nLaTeX code split into {len(latex_docs)} chunks")
         
         for i, doc in enumerate(latex_docs):
             print(f"Chunk {i+1}: {doc.page_content}")
         
     except Exception as e:
-        print(f"⚠ Error with exercise 2: {e}")
+        print(f"Error with exercise 2: {e}")
 
 def main():
     """Main function to demonstrate all text splitters"""
@@ -374,7 +374,7 @@ def main():
         "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/YRYau14UJyh0DdiLDdzFcA/companypolicies.txt",
         "companypolicies.txt"
     ):
-        print("⚠ Cannot proceed without the sample document. Please download manually or check your connection.")
+        print("Cannot proceed without the sample document. Please download manually or check your connection.")
         return
     
     # Load and display the document
@@ -386,7 +386,7 @@ def main():
         print(f"Document loaded successfully. Length: {len(companypolicies)} characters")
         print("This is a long document about a company's policies that we'll use for splitting demonstrations.\n")
     except FileNotFoundError:
-        print("⚠ Document file not found. Cannot proceed with demonstrations.")
+        print("Document file not found. Cannot proceed with demonstrations.")
         return
     
     # Demonstrate all text splitters

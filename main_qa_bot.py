@@ -20,17 +20,17 @@ sys.path.append(str(Path(__file__).parent / "m03"))
 
 def check_gpu():
     """Check GPU availability and PyTorch configuration."""
-    print("🔍 Checking GPU configuration...")
+    print("Checking GPU configuration...")
     
     if torch.cuda.is_available():
         gpu_name = torch.cuda.get_device_name(0)
         gpu_memory = torch.cuda.get_device_properties(0).total_memory / 1e9
-        print(f"✅ GPU detected: {gpu_name}")
-        print(f"✅ GPU Memory: {gpu_memory:.1f} GB")
-        print(f"✅ CUDA Version: {torch.version.cuda}")
+        print(f"GPU detected: {gpu_name}")
+        print(f"GPU Memory: {gpu_memory:.1f} GB")
+        print(f"CUDA Version: {torch.version.cuda}")
         return True
     else:
-        print("⚠️  No GPU detected. Using CPU (slower performance)")
+        print(" No GPU detected. Using CPU (slower performance)")
         return False
 
 def get_llm():
@@ -39,24 +39,24 @@ def get_llm():
         # Try Ollama first (if installed)
         from langchain_community.llms import Ollama
         
-        print("🔄 Attempting to load Ollama model...")
+        print("Attempting to load Ollama model...")
         llm = Ollama(model="llama2", temperature=0.1)
         
         # Test the model
         test_response = llm("Hello")
         if test_response:
-            print("✅ Ollama model loaded successfully")
+            print("Ollama model loaded successfully")
             return llm
             
     except Exception as e:
-        print(f"⚠️  Ollama not available: {e}")
+        print(f" Ollama not available: {e}")
     
     try:
         # Fallback to HuggingFace
         from transformers import AutoTokenizer, AutoModelForCausalLM
         import torch
         
-        print("🔄 Loading HuggingFace model as fallback...")
+        print("Loading HuggingFace model as fallback...")
         model_name = "microsoft/DialoGPT-medium"
         
         tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -64,9 +64,9 @@ def get_llm():
         
         if torch.cuda.is_available():
             model = model.to('cuda')
-            print("✅ HuggingFace model loaded on GPU")
+            print("HuggingFace model loaded on GPU")
         else:
-            print("✅ HuggingFace model loaded on CPU")
+            print("HuggingFace model loaded on CPU")
         
         # Create a simple wrapper
         class HuggingFaceLLM:
@@ -90,7 +90,7 @@ def get_llm():
         return HuggingFaceLLM()
         
     except Exception as e:
-        print(f"❌ Failed to load any language model: {e}")
+        print(f"Failed to load any language model: {e}")
         return None
 
 def document_loader(file_path: str) -> Optional[List]:
@@ -98,15 +98,15 @@ def document_loader(file_path: str) -> Optional[List]:
     try:
         from langchain_community.document_loaders import PyPDFLoader
         
-        print(f"📄 Loading PDF: {os.path.basename(file_path)}")
+        print(f"Loading PDF: {os.path.basename(file_path)}")
         loader = PyPDFLoader(file_path)
         documents = loader.load()
         
-        print(f"✅ Loaded {len(documents)} pages from PDF")
+        print(f"Loaded {len(documents)} pages from PDF")
         return documents
         
     except Exception as e:
-        print(f"❌ Error loading PDF: {e}")
+        print(f"Error loading PDF: {e}")
         return None
 
 def text_splitter(documents: List, chunk_size: int = 1000, chunk_overlap: int = 200) -> Optional[List]:
@@ -114,7 +114,7 @@ def text_splitter(documents: List, chunk_size: int = 1000, chunk_overlap: int = 
     try:
         from langchain.text_splitter import RecursiveCharacterTextSplitter
         
-        print("✂️  Splitting documents into chunks...")
+        print(" Splitting documents into chunks...")
         
         # Create text splitter
         text_splitter = RecursiveCharacterTextSplitter(
@@ -127,11 +127,11 @@ def text_splitter(documents: List, chunk_size: int = 1000, chunk_overlap: int = 
         # Split documents
         chunks = text_splitter.split_documents(documents)
         
-        print(f"✅ Split {len(documents)} documents into {len(chunks)} chunks")
+        print(f"Split {len(documents)} documents into {len(chunks)} chunks")
         return chunks
         
     except Exception as e:
-        print(f"❌ Error splitting documents: {e}")
+        print(f"Error splitting documents: {e}")
         return None
 
 def local_embedding():
@@ -139,7 +139,7 @@ def local_embedding():
     try:
         from langchain_community.embeddings import HuggingFaceEmbeddings
         
-        print("🧠 Loading embedding model...")
+        print("Loading embedding model...")
         
         # Use a local embedding model
         model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -153,11 +153,11 @@ def local_embedding():
             encode_kwargs={'normalize_embeddings': True}
         )
         
-        print(f"✅ Loaded embedding model: {model_name} on {device.upper()}")
+        print(f"Loaded embedding model: {model_name} on {device.upper()}")
         return embeddings
         
     except Exception as e:
-        print(f"❌ Error loading embedding model: {e}")
+        print(f"Error loading embedding model: {e}")
         return None
 
 def vector_database(chunks: List, embeddings) -> Optional[Any]:
@@ -165,7 +165,7 @@ def vector_database(chunks: List, embeddings) -> Optional[Any]:
     try:
         from langchain_community.vectorstores import Chroma
         
-        print("🗄️  Creating vector database...")
+        print(" Creating vector database...")
         
         # Create vector store
         vectorstore = Chroma.from_documents(
@@ -174,17 +174,17 @@ def vector_database(chunks: List, embeddings) -> Optional[Any]:
             persist_directory="./chroma_db"
         )
         
-        print(f"✅ Created vector database with {len(chunks)} chunks")
+        print(f"Created vector database with {len(chunks)} chunks")
         return vectorstore
         
     except Exception as e:
-        print(f"❌ Error creating vector database: {e}")
+        print(f"Error creating vector database: {e}")
         return None
 
 def retriever(file_path: str, query: str, k: int = 4) -> Optional[List]:
     """Load, split, embed, and retrieve documents using ChromaDB."""
     try:
-        print(f"🔍 Processing query: '{query}'")
+        print(f"Processing query: '{query}'")
         
         # Load document
         documents = document_loader(file_path)
@@ -215,33 +215,33 @@ def retriever(file_path: str, query: str, k: int = 4) -> Optional[List]:
         # Retrieve relevant documents
         docs = retriever.get_relevant_documents(query)
         
-        print(f"✅ Retrieved {len(docs)} relevant documents")
+        print(f"Retrieved {len(docs)} relevant documents")
         return docs
         
     except Exception as e:
-        print(f"❌ Error in retriever: {e}")
+        print(f"Error in retriever: {e}")
         return None
 
 def qa_bot(file_path: str, query: str) -> str:
     """Main QA function that orchestrates the complete RAG pipeline."""
     try:
-        print(f"\n🚀 Starting QA process for: {os.path.basename(file_path)}")
-        print(f"❓ Query: {query}")
+        print(f"\nStarting QA process for: {os.path.basename(file_path)}")
+        print(f"Query: {query}")
         
         # Get relevant documents
         docs = retriever(file_path, query)
         if not docs:
-            return "❌ Error: Could not retrieve relevant documents. Please check if the PDF was loaded correctly."
+            return "Error: Could not retrieve relevant documents. Please check if the PDF was loaded correctly."
         
         # Get LLM
         llm = get_llm()
         if not llm:
-            return "❌ Error: Could not load language model. Please check your model installation."
+            return "Error: Could not load language model. Please check your model installation."
         
         # Create QA chain
         from langchain.chains import RetrievalQA
         
-        print("🔗 Creating QA chain...")
+        print("Creating QA chain...")
         qa_chain = RetrievalQA.from_chain_type(
             llm=llm,
             chain_type="stuff",
@@ -250,15 +250,15 @@ def qa_bot(file_path: str, query: str) -> str:
         )
         
         # Get answer
-        print("💭 Generating answer...")
+        print("Generating answer...")
         result = qa_chain({"query": query})
         answer = result["result"]
         
-        print("✅ Answer generated successfully")
+        print("Answer generated successfully")
         return answer
         
     except Exception as e:
-        error_msg = f"❌ Error during QA process: {str(e)}"
+        error_msg = f"Error during QA process: {str(e)}"
         print(error_msg)
         return error_msg
 
@@ -299,7 +299,7 @@ def create_gradio_interface():
         # Header
         gr.HTML("""
         <div class="main-header">
-            <h1>🤖 RAG QA Bot</h1>
+            <h1>RAG QA Bot</h1>
             <h3>Generative AI Applications with RAG and LangChain</h3>
             <p>Upload any PDF document and ask questions. Powered by local AI models and GPU acceleration.</p>
         </div>
@@ -309,7 +309,7 @@ def create_gradio_interface():
             with gr.Column(scale=1):
                 # File upload
                 file_input = gr.File(
-                    label="📄 Upload PDF Document",
+                    label="Upload PDF Document",
                     file_types=[".pdf"],
                     file_count="single",
                     type="filepath"
@@ -317,14 +317,14 @@ def create_gradio_interface():
                 
                 # Query input
                 query_input = gr.Textbox(
-                    label="❓ Ask a Question",
+                    label="Ask a Question",
                     placeholder="What is this document about? What are the main topics discussed?",
                     lines=3,
                     max_lines=5
                 )
                 
                 # Submit button
-                submit_btn = gr.Button("🚀 Get Answer", variant="primary", size="lg")
+                submit_btn = gr.Button("Get Answer", variant="primary", size="lg")
                 
                 # Example queries
                 gr.Examples(
@@ -336,12 +336,12 @@ def create_gradio_interface():
                         ["Explain the methodology used in this research"]
                     ],
                     inputs=query_input,
-                    label="💡 Example Questions"
+                    label="Example Questions"
                 )
                 
                 # Status display
                 status_display = gr.Textbox(
-                    label="📊 Status",
+                    label="Status",
                     value="Ready to process PDF documents and answer questions!",
                     interactive=False,
                     lines=2
@@ -350,7 +350,7 @@ def create_gradio_interface():
             with gr.Column(scale=1):
                 # Answer output
                 answer_output = gr.Textbox(
-                    label="💡 Answer",
+                    label="Answer",
                     placeholder="Your answer will appear here...",
                     lines=15,
                     max_lines=20,
@@ -359,7 +359,7 @@ def create_gradio_interface():
                 
                 # File info
                 file_info = gr.Textbox(
-                    label="📋 File Information",
+                    label="File Information",
                     placeholder="File details will appear here...",
                     lines=3,
                     interactive=False
@@ -368,10 +368,10 @@ def create_gradio_interface():
         def process_query(file_path, query):
             """Process the query and return the answer."""
             if not file_path:
-                return "❌ Please upload a PDF file first.", "No file uploaded"
+                return "Please upload a PDF file first.", "No file uploaded"
             
             if not query.strip():
-                return "❌ Please enter a question.", f"File: {os.path.basename(file_path)}"
+                return "Please enter a question.", f"File: {os.path.basename(file_path)}"
             
             # Update status
             status = f"Processing: {os.path.basename(file_path)} | Query: {query[:50]}..."
@@ -382,7 +382,7 @@ def create_gradio_interface():
             # Update file info
             file_info = f"File: {os.path.basename(file_path)}\nSize: {os.path.getsize(file_path) / 1024:.1f} KB\nStatus: Processed"
             
-            return answer, file_info, "✅ Processing complete!"
+            return answer, file_info, "Processing complete!"
         
         # Connect components
         submit_btn.click(
@@ -393,7 +393,7 @@ def create_gradio_interface():
         
         # Auto-process when file is uploaded
         file_input.change(
-            fn=lambda x: f"✅ File uploaded: {os.path.basename(x) if x else 'No file'}" if x else "No file uploaded",
+            fn=lambda x: f"File uploaded: {os.path.basename(x) if x else 'No file'}" if x else "No file uploaded",
             inputs=file_input,
             outputs=status_display
         )
@@ -402,19 +402,19 @@ def create_gradio_interface():
 
 def main():
     """Main function to run the QA Bot."""
-    print("🚀 Starting RAG QA Bot - Generative AI Applications")
+    print("Starting RAG QA Bot - Generative AI Applications")
     print("=" * 60)
     
     # Check GPU
     gpu_available = check_gpu()
     
     # Create and launch interface
-    print("\n🎨 Creating Gradio interface...")
+    print("\nCreating Gradio interface...")
     interface = create_gradio_interface()
     
-    print("\n🌐 Launching web interface...")
-    print("📱 Open your browser and navigate to the local URL")
-    print("📄 Upload any PDF document and start asking questions!")
+    print("\nLaunching web interface...")
+    print("Open your browser and navigate to the local URL")
+    print("Upload any PDF document and start asking questions!")
     
     # Launch the interface
     interface.launch(

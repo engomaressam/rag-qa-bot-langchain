@@ -44,13 +44,13 @@ def download_file(url, filename):
         try:
             import urllib.request
             urllib.request.urlretrieve(url, filename)
-            print(f"✓ {filename} downloaded successfully")
+            print(f"{filename} downloaded successfully")
         except Exception as e:
-            print(f"⚠ Error downloading {filename}: {e}")
+            print(f"Error downloading {filename}: {e}")
             print("Please download manually or check your internet connection")
             return False
     else:
-        print(f"✓ {filename} already exists")
+        print(f"{filename} already exists")
     return True
 
 def load_from_txt_files():
@@ -63,11 +63,11 @@ def load_from_txt_files():
     
     # Use TextLoader to load the file
     loader = TextLoader("new-Policies.txt")
-    print(f"✓ TextLoader created: {loader}")
+    print(f"TextLoader created: {loader}")
     
     # Load the data as documents
     data = loader.load()
-    print(f"✓ Data loaded successfully. Number of documents: {len(data)}")
+    print(f"Data loaded successfully. Number of documents: {len(data)}")
     
     # Display the document structure
     print("\nDocument structure:")
@@ -92,7 +92,7 @@ def load_from_pdf_files():
     try:
         loader = PyPDFLoader(pdf_url)
         pages = loader.load_and_split()
-        print(f"✓ PyPDFLoader loaded {len(pages)} pages")
+        print(f"PyPDFLoader loaded {len(pages)} pages")
         
         # Display first page
         print("\nFirst page:")
@@ -105,16 +105,16 @@ def load_from_pdf_files():
             print(page)
             print("-" * 50)
     except Exception as e:
-        print(f"⚠ Error with PyPDFLoader: {e}")
+        print(f"Error with PyPDFLoader: {e}")
     
     # PyMuPDFLoader
     print("\n--- PyMuPDFLoader ---")
     try:
         loader = PyMuPDFLoader(pdf_url)
-        print(f"✓ PyMuPDFLoader created: {loader}")
+        print(f"PyMuPDFLoader created: {loader}")
         
         data = loader.load()
-        print(f"✓ PyMuPDFLoader loaded {len(data)} pages")
+        print(f"PyMuPDFLoader loaded {len(data)} pages")
         
         # Display first page
         print("\nFirst page:")
@@ -123,7 +123,7 @@ def load_from_pdf_files():
         # Show metadata comparison
         print("\nPyMuPDFLoader provides more detailed metadata than PyPDFLoader")
     except Exception as e:
-        print(f"⚠ Error with PyMuPDFLoader: {e}")
+        print(f"Error with PyMuPDFLoader: {e}")
 
 def load_from_markdown_files():
     """Demonstrate loading from Markdown files"""
@@ -136,10 +136,10 @@ def load_from_markdown_files():
     # Use UnstructuredMarkdownLoader
     markdown_path = "markdown-sample.md"
     loader = UnstructuredMarkdownLoader(markdown_path)
-    print(f"✓ UnstructuredMarkdownLoader created: {loader}")
+    print(f"UnstructuredMarkdownLoader created: {loader}")
     
     data = loader.load()
-    print(f"✓ Markdown loaded successfully. Number of documents: {len(data)}")
+    print(f"Markdown loaded successfully. Number of documents: {len(data)}")
     
     # Display the data
     print("\nMarkdown content:")
@@ -170,12 +170,12 @@ def load_from_json_files():
         )
         
         data = loader.load()
-        print(f"✓ JSON loaded successfully. Number of documents: {len(data)}")
+        print(f"JSON loaded successfully. Number of documents: {len(data)}")
         
         print("\nExtracted content:")
         pprint(data)
     except Exception as e:
-        print(f"⚠ Error with JSONLoader: {e}")
+        print(f"Error with JSONLoader: {e}")
 
 def load_from_csv_files():
     """Demonstrate loading from CSV files"""
@@ -190,7 +190,7 @@ def load_from_csv_files():
     try:
         loader = CSVLoader(file_path='mlb-teams-2012.csv')
         data = loader.load()
-        print(f"✓ CSV loaded successfully. Number of documents: {len(data)}")
+        print(f"CSV loaded successfully. Number of documents: {len(data)}")
         
         print("\nFirst few documents:")
         for i, doc in enumerate(data[:3]):
@@ -198,7 +198,7 @@ def load_from_csv_files():
             print(doc)
             print("-" * 30)
     except Exception as e:
-        print(f"⚠ Error with CSVLoader: {e}")
+        print(f"Error with CSVLoader: {e}")
     
     # UnstructuredCSVLoader
     print("\n--- UnstructuredCSVLoader ---")
@@ -208,7 +208,7 @@ def load_from_csv_files():
             mode="elements"
         )
         data = loader.load()
-        print(f"✓ UnstructuredCSV loaded successfully. Number of documents: {len(data)}")
+        print(f"UnstructuredCSV loaded successfully. Number of documents: {len(data)}")
         
         print("\nFirst document content:")
         print(data[0].page_content)
@@ -216,7 +216,7 @@ def load_from_csv_files():
         print("\nHTML representation:")
         print(data[0].metadata["text_as_html"])
     except Exception as e:
-        print(f"⚠ Error with UnstructuredCSVLoader: {e}")
+        print(f"Error with UnstructuredCSVLoader: {e}")
 
 def load_from_web_files():
     """Demonstrate loading from web pages"""
@@ -236,19 +236,19 @@ def load_from_web_files():
         print(soup.prettify()[:500] + "...")
         print("\nBeautifulSoup loads HTML tags and external links, which may not be desired.")
     except Exception as e:
-        print(f"⚠ Error with BeautifulSoup: {e}")
+        print(f"Error with BeautifulSoup: {e}")
     
     # WebBaseLoader - single page
     print("\n--- WebBaseLoader (Single Page) ---")
     try:
         loader = WebBaseLoader("https://www.ibm.com/topics/langchain")
         data = loader.load()
-        print(f"✓ Web page loaded successfully. Number of documents: {len(data)}")
+        print(f"Web page loaded successfully. Number of documents: {len(data)}")
         
         print("\nWeb content:")
         print(data)
     except Exception as e:
-        print(f"⚠ Error with WebBaseLoader (single): {e}")
+        print(f"Error with WebBaseLoader (single): {e}")
     
     # WebBaseLoader - multiple pages
     print("\n--- WebBaseLoader (Multiple Pages) ---")
@@ -259,12 +259,12 @@ def load_from_web_files():
         ]
         loader = WebBaseLoader(urls)
         data = loader.load()
-        print(f"✓ Multiple web pages loaded successfully. Number of documents: {len(data)}")
+        print(f"Multiple web pages loaded successfully. Number of documents: {len(data)}")
         
         print("\nMultiple web content:")
         print(data)
     except Exception as e:
-        print(f"⚠ Error with WebBaseLoader (multiple): {e}")
+        print(f"Error with WebBaseLoader (multiple): {e}")
 
 def load_from_word_files():
     """Demonstrate loading from Word documents"""
@@ -277,15 +277,15 @@ def load_from_word_files():
     # Use Docx2txtLoader
     try:
         loader = Docx2txtLoader("file-sample.docx")
-        print(f"✓ Docx2txtLoader created: {loader}")
+        print(f"Docx2txtLoader created: {loader}")
         
         data = loader.load()
-        print(f"✓ Word document loaded successfully. Number of documents: {len(data)}")
+        print(f"Word document loaded successfully. Number of documents: {len(data)}")
         
         print("\nWord document content:")
         print(data)
     except Exception as e:
-        print(f"⚠ Error with Docx2txtLoader: {e}")
+        print(f"Error with Docx2txtLoader: {e}")
 
 def load_from_unstructured_files():
     """Demonstrate loading from unstructured files"""
@@ -296,20 +296,20 @@ def load_from_unstructured_files():
     try:
         loader = UnstructuredFileLoader("new-Policies.txt")
         data = loader.load()
-        print(f"✓ UnstructuredFileLoader loaded .txt successfully. Number of documents: {len(data)}")
+        print(f"UnstructuredFileLoader loaded .txt successfully. Number of documents: {len(data)}")
         print(data)
     except Exception as e:
-        print(f"⚠ Error loading .txt with UnstructuredFileLoader: {e}")
+        print(f"Error loading .txt with UnstructuredFileLoader: {e}")
     
     # Load .md file
     print("\n--- Loading .md file ---")
     try:
         loader = UnstructuredFileLoader("markdown-sample.md")
         data = loader.load()
-        print(f"✓ UnstructuredFileLoader loaded .md successfully. Number of documents: {len(data)}")
+        print(f"UnstructuredFileLoader loaded .md successfully. Number of documents: {len(data)}")
         print(data)
     except Exception as e:
-        print(f"⚠ Error loading .md with UnstructuredFileLoader: {e}")
+        print(f"Error loading .md with UnstructuredFileLoader: {e}")
     
     # Load multiple files with different formats
     print("\n--- Loading multiple files with different formats ---")
@@ -317,10 +317,10 @@ def load_from_unstructured_files():
         files = ["markdown-sample.md", "new-Policies.txt"]
         loader = UnstructuredFileLoader(files)
         data = loader.load()
-        print(f"✓ UnstructuredFileLoader loaded multiple files successfully. Number of documents: {len(data)}")
+        print(f"UnstructuredFileLoader loaded multiple files successfully. Number of documents: {len(data)}")
         print(data)
     except Exception as e:
-        print(f"⚠ Error loading multiple files with UnstructuredFileLoader: {e}")
+        print(f"Error loading multiple files with UnstructuredFileLoader: {e}")
 
 def exercises():
     """Complete the exercises from the notebook"""
@@ -341,10 +341,10 @@ def exercises():
         pdf_url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/Q81D33CdRLK6LswuQrANQQ/instructlab.pdf"
         loader = PyPDFium2Loader(pdf_url)
         data = loader.load()
-        print(f"✓ PyPDFium2Loader loaded successfully. Number of documents: {len(data)}")
+        print(f"PyPDFium2Loader loaded successfully. Number of documents: {len(data)}")
         print("PyPDFium2Loader provides another option for PDF processing")
     except Exception as e:
-        print(f"⚠ Error with PyPDFium2Loader: {e}")
+        print(f"Error with PyPDFium2Loader: {e}")
     
     # Exercise 2 - Load from Arxiv
     print("\n--- Exercise 2: Load from Arxiv ---")
@@ -359,11 +359,11 @@ def exercises():
             from langchain_community.document_loaders import ArxivLoader
         
         docs = ArxivLoader(query="1605.08386", load_max_docs=2).load()
-        print(f"✓ ArxivLoader loaded successfully. Number of documents: {len(docs)}")
+        print(f"ArxivLoader loaded successfully. Number of documents: {len(docs)}")
         print("\nFirst document content (first 1000 characters):")
         print(docs[0].page_content[:1000])
     except Exception as e:
-        print(f"⚠ Error with ArxivLoader: {e}")
+        print(f"Error with ArxivLoader: {e}")
 
 def main():
     """Main function to demonstrate all document loaders"""
@@ -373,9 +373,9 @@ def main():
     try:
         nltk.download('punkt_tab')
         nltk.download('averaged_perceptron_tagger_eng')
-        print("✓ NLTK data downloaded successfully\n")
+        print("NLTK data downloaded successfully\n")
     except Exception as e:
-        print(f"⚠ Error downloading NLTK data: {e}\n")
+        print(f"Error downloading NLTK data: {e}\n")
     
     # Demonstrate all loaders
     load_from_txt_files()
